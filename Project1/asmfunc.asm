@@ -1,14 +1,10 @@
+section .data
+format db "%.lf", 10, 0
+
 section .text
 global process
-
-; Import printf function from the C library
 extern printf
 
-; Input:
-;   rdi - pointer to num array
-;   rsi - size of num array
-; Output:
-;   Returns the result calculated from the given num array
 
 process:
     push rbp
@@ -19,19 +15,19 @@ process:
     mov r9, rsi         ; r9 = size
     xorpd xmm0, xmm0    ; result = 0
     
-.loop:
+loop:
     cmp r8, r9          ; Compare iteration with size
-    jg .end             ; If iteration > size, end loop
+    jg end             ; If iteration > size, end loop
     
     ; Check if any index is out of bounds
     mov rax, r8
     sub rax, 3
-    jl .out_of_bounds
+    jl out_of_bounds
     
     mov rax, r8
     add rax, 3
     cmp rax, r9
-    jg .out_of_bounds
+    jg out_of_bounds
     
     ; Calculate the result
     mov rax, r8
@@ -57,21 +53,18 @@ process:
     call printf
     
     inc r8              ; Increment iteration
-    jmp .loop
+    jmp loop
     
-.out_of_bounds:
+out_of_bounds:
     ; Print 0 if out of bounds
     mov rsi, qword 0    ; Load 0 into rsi
     mov rdi, format    ; Load format string address into rdi
     call printf         ; Call printf function
     
     inc r8              ; Increment iteration
-    jmp .loop
+    jmp loop
     
-.end:
+end:
     cvtsd2si rax, xmm0      ; Move result to rax for return
     pop rbp
     ret
-
-section .data
-format db "%.lf", 10, 0

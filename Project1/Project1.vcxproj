@@ -27,6 +27,8 @@
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\aldwi\AppData\Local\bin\NASM\nasm -f win64 asmfunc.asm</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">asmfunc.obj</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Program Files (x86)/SASM/NASM/nasm -f win64 asmfunc.asm</Command>
     </CustomBuild>
   </ItemGroup>
   <PropertyGroup Label="Globals">
