@@ -1,9 +1,9 @@
 section .data
-format db "%.lf", 10, 0
+
 
 section .text
 global process
-extern printf
+
 
 
 process:
@@ -31,14 +31,13 @@ loop:
     
     ; Calculate the result
     mov rax, r8
-    mov rdi, rdi        ; Load address of num array
-    movsd xmm1, qword [rdi + rax * 8 - 3 * 8] ; Load num[i - 3] to xmm1
-    movsd xmm2, qword [rdi + rax * 8 - 2 * 8] ; Load num[i - 2] to xmm2
-    movsd xmm3, qword [rdi + rax * 8 - 1 * 8] ; Load num[i - 1] to xmm3
-    movsd xmm4, qword [rdi + rax * 8]         ; Load num[i] to xmm4
-    movsd xmm5, qword [rdi + rax * 8 + 1 * 8] ; Load num[i + 1] to xmm5
-    movsd xmm6, qword [rdi + rax * 8 + 2 * 8] ; Load num[i + 2] to xmm6
-    movsd xmm7, qword [rdi + rax * 8 + 3 * 8] ; Load num[i + 3] to xmm7
+    movsd xmm1, [rcx + rax * 2 - 16] ; Load num[i - 3] to xmm1
+    movsd xmm2, [rcx + rax * 2 - 8]  ; Load num[i - 2] to xmm2
+    movsd xmm3, [rcx + rax * 2]      ; Load num[i - 1] to xmm3
+    movsd xmm4, [rcx + rax * 2 + 8]  ; Load num[i] to xmm4
+    movsd xmm5, [rcx + rax * 2 + 16] ; Load num[i + 1] to xmm5
+    movsd xmm6, [rcx + rax * 4 + 8]  ; Load num[i + 2] to xmm6
+    movsd xmm7, [rcx + rax * 4 + 16] ; Load num[i + 3] to xmm7
     addsd xmm0, xmm1    ; xmm0 = xmm0 + xmm1
     addsd xmm0, xmm2    ; xmm0 = xmm0 + xmm2
     addsd xmm0, xmm3    ; xmm0 = xmm0 + xmm3
@@ -47,24 +46,19 @@ loop:
     addsd xmm0, xmm6    ; xmm0 = xmm0 + xmm6
     addsd xmm0, xmm7    ; xmm0 = xmm0 + xmm7
     
-    ; Print the result using printf
-    mov rdi, format     ; Load format string address into rdi
-    mov rax, 0          ; Call printf function
-    call printf
+    
     
     inc r8              ; Increment iteration
     jmp loop
     
 out_of_bounds:
     ; Print 0 if out of bounds
-    mov rsi, qword 0    ; Load 0 into rsi
-    mov rdi, format    ; Load format string address into rdi
-    call printf         ; Call printf function
+  
     
     inc r8              ; Increment iteration
     jmp loop
-    
+ 
 end:
-    cvtsd2si rax, xmm0      ; Move result to rax for return
-    pop rbp
+    ;cvtsd2si rax, xmm0      ; Move result to rax for return
+   ; pop rbp
     ret

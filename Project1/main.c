@@ -46,7 +46,7 @@ int main() {
         token = strtok_s(NULL, ",", &context); // Pass the context pointer
     }
 
-    // Print the parsed numbers
+    // Print the parsed numberss
     printf("Parsed numbers:\n");
     for (int i = 0; i < counter; i++) {
         printf("%lf\n", nums[i]);
