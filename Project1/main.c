@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-extern double process(double num[], int size);
+extern double process(double nums[], int size);
 
 int main() {
+    
 
     printf("Enter a comma-separated list of numbers (e.g., 1,2,3,4,5,6,7,8): ");
     char input[100];
@@ -52,11 +53,13 @@ int main() {
         printf("%lf\n", nums[i]);
     }
 
+    
     // Call the assembly function
+
     double result = process(nums, counter);
 
     // Print the result returned from assembly function
-    printf("Result from assembly function: %lf\n", result);
+    printf("Result from assembly function: %d %d\n", result, counter);
 
     free(nums);
     free(str);
