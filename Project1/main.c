@@ -1,68 +1,110 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <time.h> 
+#include <stdint.h> 
 
-extern double process(double nums[], int size);
+// Declare the assembly function
+extern double asm_process(double* X, double* Y, int size);
+
+// Function prototypes
+void init_X(double* X, int size);
+void c_process(double* X, double* Y, int size);
 
 int main() {
+    int size;
+    int iterations;
+
+    printf("Enter the size of the array: ");
+    scanf_s(" %d", &size); 
+    //printf("Enter how many times the function should run: ");
+    //scanf_s(" %d", &iterations);
     
+    double* X = malloc(size * sizeof(double));
+    int Y_size = size - 6;
+    double* AYout = malloc(Y_size * sizeof(double));
+    double* CYout = malloc(Y_size * sizeof(double));
 
-    printf("Enter a comma-separated list of numbers (e.g., 1,2,3,4,5,6,7,8): ");
-    char input[100];
-    scanf_s("%s", input, (unsigned)_countof(input)); // Specify the size of the buffer
+    // Fill X with random numbers
 
-    // Count the number of commas to determine the number of elements
-    int count = 1;
-    for (int i = 0; input[i] != '\0'; i++) {
-        if (input[i] == ',') {
-            count++;
-        }
+    init_X(X, size);
+
+    // Print X for debugging
+    printf("X array:\n");
+    for (int i = 0; i < 10; i++) {
+        printf("%lf ", X[i]);
     }
+    printf("\n");
 
-    char* str = malloc(sizeof(char) * (strlen(input) + 1));
-    if (str == NULL) {
-        printf("Memory allocation failed.\n");
-        return 1;
+
+    // Call the C function
+    clock_t t;
+    t = clock();
+    for (int i = 0; i < 100; i++) {
+        c_process(X, CYout, size);
     }
+    t = clock() - t;
+    double c_time_taken = ((double)t) / CLOCKS_PER_SEC;
 
-    strcpy_s(str, strlen(input) + 1, input); // Specify the size of the destination buffer
+    printf("C TIME: %lf sec\n", c_time_taken);
 
-    char* token = NULL;
-    char* context = NULL; // For strtok_s
-    token = strtok_s(str, ",", &context); // Pass the context pointer
-
-    int counter = 0;
-    double* nums = malloc(sizeof(double) * count);
-
-    if (nums == NULL) {
-        printf("Memory allocation failed.\n");
-        free(str);
-        return 1;
+    // Print the result from the C function
+    printf("Result from C function:\n");
+    for (int i = 0; i < 10; i++) {
+        printf("%lf\n", CYout[i]);
     }
+    printf("\n");
 
-    while (token != NULL && counter < count) {
-        // Convert token to double
-        double ret = strtod(token, NULL);
-        nums[counter++] = ret;
-        token = strtok_s(NULL, ",", &context); // Pass the context pointer
-    }
 
-    // Print the parsed numberss
-    printf("Parsed numbers:\n");
-    for (int i = 0; i < counter; i++) {
-        printf("%lf\n", nums[i]);
-    }
-
-    
     // Call the assembly function
 
-    double result = process(nums, counter);
+    clock_t a;
+    a = clock();
+    for (int i = 0; i < 100; i++){
+        asm_process(X, AYout, Y_size);
+    }
+    a = clock() - a;
+    double a_time_taken = ((double)a) / CLOCKS_PER_SEC;
+    printf("ASSEMBLY TIME: %Lf sec\n", a_time_taken);
 
-    // Print the result returned from assembly function
-    printf("Result from assembly function: %d %d\n", result, counter);
+    // Print the result from the assembly function
+    printf("Result from Assembly function:\n");
+    for (int i = 0; i < 10; i++) {
+        printf("%lf\n", AYout[i]);
+    }
+    printf("\n");
 
-    free(nums);
-    free(str);
-
+    // Free allocated memory
+    free(X);
+    free(CYout);
+    free(AYout);
     return 0;
+}
+
+void init_X(double* X, int size) {
+    // Seed the random number generator with current time
+    srand(time(NULL));
+
+    // Fill X with random numbers
+    for (int i = 0; i < size; i++) {
+        X[i] = (double)rand();
+    }
+}
+
+void c_process(double* X, double* Y, int size) {
+    // Process the array using C
+    int end = size - 1;
+    int i;
+    int counter = 0;
+    for (i = 3; i <= end; i++) { 
+
+        if (i - 3 < 0 || i + 3 >= size) {
+            break;
+        }
+        else {
+            Y[counter] = X[i - 3] + X[i - 2] + X[i - 1] + X[i] + X[i + 1] + X[i + 2] + X[i + 3];
+            counter++;
+        }
+
+
+    }
 }

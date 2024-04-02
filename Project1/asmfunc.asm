@@ -1,58 +1,52 @@
 section .data
-msg db "%.1lf",10,0
+A dq 2.0
 
 section .text
-extern printf
 bits 64
 Default rel
-global process
+global asm_process
 
 
-process:
-    mov r10, rcx  ;have to use rcx for printing
-    xor ebx, ebx  ; Counter initialization
+asm_process:
+    mov r10, rax      
+    mov r9, rax     
+
 loop:
     
+    cmp r9, r8
+    ja end          
 
-    ;cmp ebx, edx
-    ;jge end
-    ;cmp qword [r10 + rax * 2 - 16], 0
-    ;jl end
-    ;add r10, 8
-
-    movsd xmm1, [r10 + rax * 2 - 16] ; Load num[i - 3] to xmm1
-    movsd xmm2, [r10 + rax * 2 - 8]  ; Load num[i - 2] to xmm2
-    movsd xmm3, [r10 + rax * 2]      ; Load num[i - 1] to xmm3
-    movsd xmm4, [r10 + rax * 2 + 8]  ; Load num[i] to xmm4
-    movsd xmm5, [r10 + rax * 2 + 16] ; Load num[i + 1] to xmm5
-    movsd xmm6, [r10 + rax * 4 + 8]  ; Load num[i + 2] to xmm6
-    movsd xmm7, [r10 + rax * 4 + 16] ; Load num[i + 3] to xmm7
+    xorps xmm0, xmm0   ; Reset xmm0 to 0
+    movsd xmm1, [rcx + r10 * 8 - 8] ; Load num[i - 3] to xmm1
+    movsd xmm2, [rcx + r10 * 8]     ; Load num[i - 2] to xmm2
+    movsd xmm3, [rcx + r10 * 8 + 8] ; Load num[i - 1] to xmm3
+    movsd xmm4, [rcx + r10 * 8 + 16]; Load num[i] to xmm4
+    movsd xmm5, [rcx + r10 * 8 + 24]; Load num[i + 1] to xmm5
+    movsd xmm6, [rcx + r10 * 8 + 32]; Load num[i + 2] to xmm6
+    movsd xmm7, [rcx + r10 * 8 + 40]; Load num[i + 3] to xmm7
     
-    xorps xmm0, xmm0
-
-    addsd xmm0, xmm1    ; xmm0 = xmm0 + xmm1
-    addsd xmm0, xmm2    ; xmm0 = xmm0 + xmm2
-    addsd xmm0, xmm3    ; xmm0 = xmm0 + xmm3
-    addsd xmm0, xmm4    ; xmm0 = xmm0 + xmm4
-    addsd xmm0, xmm5    ; xmm0 = xmm0 + xmm5
-    addsd xmm0, xmm6    ; xmm0 = xmm0 + xmm6
-    addsd xmm0, xmm7    ; xmm0 = xmm0 + xmm7
-
-    
-    sub rsp, 8*7
-
-    lea rcx, [msg]
-    movq rdx, xmm0
-    call printf
-
-    add rsp, 8*7
     
 
-    ;inc ebx
+    ; Accumulate sum
+    addsd xmm0, xmm1   ; xmm0 = xmm0 + xmm1
+    addsd xmm0, xmm2   ; xmm0 = xmm0 + xmm2
+    addsd xmm0, xmm3   ; xmm0 = xmm0 + xmm3
+    addsd xmm0, xmm4   ; xmm0 = xmm0 + xmm4
+    addsd xmm0, xmm5   ; xmm0 = xmm0 + xmm5
+    addsd xmm0, xmm6   ; xmm0 = xmm0 + xmm6
+    addsd xmm0, xmm7   ; xmm0 = xmm0 + xmm7
+    
+    ; Store result back to memory
+    ;movsd [rdx + r9 * 8 - 8], 32
 
-    ;jmp loop
+    movsd [rdx + r9 * 8 - 8], xmm0  
+
+    ; Increment loop counters
+              
+    inc r10            ; Increment index for storing result
+    inc r9          ; Increment loop counter
+    
+    jmp loop           ; Repeat loop
 
 end:
-
-    
-    ret
+    ret                ; Return

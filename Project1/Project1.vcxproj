@@ -28,7 +28,8 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Nasm/nasm -f win64 asmfunc.asm</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">asmfunc.obj</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Program Files (x86)/SASM/NASM/nasm -f win64 asmfunc.asm</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Nasm/nasm -f win64 asmfunc.asm</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">asmfunc.obj</Outputs>
     </CustomBuild>
   </ItemGroup>
   <PropertyGroup Label="Globals">
