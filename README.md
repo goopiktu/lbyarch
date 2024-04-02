@@ -1,13 +1,11 @@
-![image](https://github.com/goopiktu/lbyarch/assets/91401877/b1012963-918f-4022-93d5-17e9a30546d5)
+![image](https://github.com/goopiktu/lbyarch/assets/91401877/640818a7-7c17-4f9f-a17a-45da0e8920aa)
 
-![image](https://github.com/goopiktu/lbyarch/assets/91401877/8aedd15a-4d97-418f-9563-9b65f076eeb5)
+![image](https://github.com/goopiktu/lbyarch/assets/91401877/0d1c6ffd-ebd6-472d-911b-bee62fcd89a8)
 
 ![image](https://github.com/goopiktu/lbyarch/assets/91401877/23231c50-3d7a-4694-b151-a7eecf4a1b5c)
 
-
-Based on our required inputs we were not able to get the times for them so we had to increase the size of the array to be able to see the difference. The input of the elements for the vector is 
-
-So we used the size 200,000 240,000 and 300,000
+1073741824
+The input of the elements for the vector is 1,048,576(2^20) 16,777,216(2^24) and 1,073,741,824(2^30)
 ![image](https://github.com/goopiktu/lbyarch/assets/91401877/b31b8e5d-c810-45d6-9a65-979c2de5a1be)
 
 ![image](https://github.com/goopiktu/lbyarch/assets/91401877/9b3b92b8-83a5-4255-9c65-a565c3ca2d1d)
