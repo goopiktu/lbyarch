@@ -39,6 +39,7 @@ loop:
     ; Store result back to memory
     ;movsd [rdx + r9 * 8 - 8], 32
 
+    ;movsd xmm1, [A]
     movsd [rdx + r9 * 8 - 8], xmm0  
 
     ; Increment loop counters
