@@ -13,6 +13,7 @@ void c_process(double* X, double* Y, int size);
 int main() {
     int size;
     int iterations;
+    int printlimit;
 
     printf("Enter the size of the array: ");
     scanf_s(" %d", &size); 
@@ -25,6 +26,13 @@ int main() {
     double* CYout = malloc(Y_size * sizeof(double));
 
     // Fill X with random numbers
+    if (size > 16) {
+        printlimit = 10;
+    }
+    else {
+        printlimit = Y_size;
+    }
+
 
     init_X(X, size);
 
@@ -39,7 +47,7 @@ int main() {
     // Call the C function
     clock_t t;
     t = clock();
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 30; i++) {
         c_process(X, CYout, size);
     }
     t = clock() - t;
@@ -49,7 +57,7 @@ int main() {
 
     // Print the result from the C function
     printf("Result from C function:\n");
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < printlimit; i++) {
         printf("%lf\n", CYout[i]);
     }
     printf("\n");
@@ -59,7 +67,7 @@ int main() {
 
     clock_t a;
     a = clock();
-    for (int i = 0; i < 100; i++){
+    for (int i = 0; i < 30; i++){
         asm_process(X, AYout, Y_size);
     }
     a = clock() - a;
@@ -68,7 +76,7 @@ int main() {
 
     // Print the result from the assembly function
     printf("Result from Assembly function:\n");
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < printlimit; i++) {
         printf("%lf\n", AYout[i]);
     }
     printf("\n");
